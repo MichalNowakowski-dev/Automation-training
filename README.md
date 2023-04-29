@@ -3,7 +3,7 @@
 ## Links
 - course https://jaktestowac.pl/course/playwright-wprowadzenie/
 - test site https://demo-bank.vercel.app/  
-- code repository https://github.com/jaktestowac/playwright_automatyzacja_wprowadzenie
+- code repository https://github.com/mikroTesting/Automation-training
 
 ## Commands
 - check `NodeJS` version  
@@ -27,10 +27,13 @@ hit twice <kbd>Ctrl</kbd> + <kbd>C</kbd>
     ```javascript
     // {
     //   name: 'firefox',
-    //   use: {
-    //     ...devices['Desktop Firefox'],
-    //   },
+    //   use: { ...devices['Desktop Firefox'] },
     // },
+
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // }
     ```
 
 ## Visual Studio Code
