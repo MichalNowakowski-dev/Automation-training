@@ -6,8 +6,8 @@ test.describe("pulpit test", () => {
   const userPassword = "testtest";
 
   test.beforeEach(async ({ page }) => {
-    const url = "https://demo-bank.vercel.app/";
-    await page.goto(url);
+
+    await page.goto('/');
     await page.getByTestId("login-input").fill(userLogin);
     await page.getByTestId("password-input").fill(userPassword);
     await page.getByTestId("login-button").click();
@@ -46,7 +46,7 @@ test.describe("pulpit test", () => {
     await page.locator("#uniform-widget_1_topup_agreement span").click();
     await page.getByRole("button", { name: "doładuj telefon" }).click();
     await page.getByTestId("close-button").click();
-    
+
     // Assert
     await expect(page.getByTestId("message-text")).toHaveText(
       `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupRevieverNumber}`
