@@ -1,10 +1,17 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("pulpit test", () => {
-  // Arrange - global
-  const url = "https://demo-bank.vercel.app/";
+
   const userLogin = "tester12";
   const userPassword = "testtest";
+
+  test.beforeEach(async ({ page }) => {
+    const url = "https://demo-bank.vercel.app/";
+    await page.goto(url);
+    await page.getByTestId("login-input").fill(userLogin);
+    await page.getByTestId("password-input").fill(userPassword);
+    await page.getByTestId("login-button").click();
+  });
 
   test("001 Valid quick transfer with correct data", async ({ page }) => {
     // Arrange
@@ -12,16 +19,11 @@ test.describe("pulpit test", () => {
     const transferAmount = "150";
     const transferTitle = "Zwrot środków";
     const expectedTransferReciever = "Chuck Demobankowy";
-    // Act
-    await page.goto(url);
-    await page.getByTestId("login-input").fill(userLogin);
-    await page.getByTestId("password-input").fill(userPassword);
-    await page.getByTestId("login-button").click();
 
+    // Act
     await page.locator("#widget_1_transfer_receiver").selectOption(recieverId);
     await page.locator("#widget_1_transfer_amount").fill(transferAmount);
     await page.locator("#widget_1_transfer_title").fill(transferTitle);
-
     await page.getByRole("button", { name: "wykonaj" }).click();
     await page.getByTestId("close-button").click();
 
@@ -35,13 +37,8 @@ test.describe("pulpit test", () => {
     // Arrange
     const topupRevieverNumber = "502 xxx xxx";
     const topupAmount = "30";
+
     // Act
-    await page.goto(url);
-
-    await page.getByTestId("login-input").fill(userLogin);
-    await page.getByTestId("password-input").fill(userPassword);
-    await page.getByTestId("login-button").click();
-
     await page
       .locator("#widget_1_topup_receiver")
       .selectOption(topupRevieverNumber);
@@ -49,6 +46,7 @@ test.describe("pulpit test", () => {
     await page.locator("#uniform-widget_1_topup_agreement span").click();
     await page.getByRole("button", { name: "doładuj telefon" }).click();
     await page.getByTestId("close-button").click();
+    
     // Assert
     await expect(page.getByTestId("message-text")).toHaveText(
       `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupRevieverNumber}`
