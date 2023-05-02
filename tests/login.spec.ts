@@ -1,19 +1,24 @@
 import { test, expect } from "@playwright/test";
 import { loginData } from "../test-data/login.data";
+import { LoginPage } from "../pages/login.page";
 
 test.describe("User login funcionality", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
   });
-
+  
   test("001 Valid login with correct credentials", async ({ page }) => {
     // Arrange
+    const username = loginData.userLogin
+    const userPassword = loginData.userPassword
     const expectedUsername = "Jan Demobankowy";
 
     // Act
-    await page.getByTestId("login-input").fill(loginData.userLogin);
-    await page.getByTestId("password-input").fill(loginData.userPassword);
-    await page.getByTestId("login-button").click();
+    const loginPage = new LoginPage(page);
+    
+    await loginPage.loginInput.fill(username)
+    await loginPage.passwordInput.fill(userPassword)
+    await loginPage.loginButton.click();
 
     // Assert
     await expect(page.getByTestId("user-name")).toBeVisible();
@@ -27,7 +32,7 @@ test.describe("User login funcionality", () => {
 
     // Act
     await page.getByTestId("login-input").fill(invalidUserLogin);
-    await page.getByTestId("password-input").fill(loginData.userPassword);
+    await page.getByTestId("password-input").click()
 
     // Assert
     await expect(page.getByTestId("error-login-id")).toBeVisible();
@@ -39,11 +44,12 @@ test.describe("User login funcionality", () => {
 
   test("003 Invalid login with too short password", async ({ page }) => {
     // Arrange
+    const username = loginData.userLogin
     const invalidUserPassword = "haslo";
     const errorPasswordMessage = "hasło ma min. 8 znaków";
 
     // Act
-    await page.getByTestId("login-input").fill(loginData.userLogin);
+    await page.getByTestId("login-input").fill(username);
     await page.getByTestId("password-input").fill(invalidUserPassword);
     await page.getByTestId("password-input").blur(); // Usuwa focus z elementu
 

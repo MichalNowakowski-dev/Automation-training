@@ -1,12 +1,19 @@
 import { test, expect } from "@playwright/test";
 import { loginData } from "../test-data/login.data";
+import { LoginPage } from "../pages/login.page";
 
 test.describe("pulpit test", () => {
   test.beforeEach(async ({ page }) => {
+    const username = loginData.userLogin
+    const userPassword = loginData.userPassword
+    
     await page.goto("/");
-    await page.getByTestId("login-input").fill(loginData.userLogin);
-    await page.getByTestId("password-input").fill(loginData.userPassword);
-    await page.getByTestId("login-button").click();
+
+    const loginPage = new LoginPage(page);
+    
+    await loginPage.loginInput.fill(username)
+    await loginPage.passwordInput.fill(userPassword)
+    await loginPage.loginButton.click();
   });
 
   test("001 Valid quick transfer with correct data", async ({ page }) => {
