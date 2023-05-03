@@ -31,27 +31,30 @@ test.describe("pulpit test", () => {
     await pulpitPage.closeButton.click();
 
     // Assert
-    await expect(pulpitPage.showMessages).toHaveText(
+    await expect(pulpitPage.messageText).toHaveText(
       `Przelew wykonany! ${expectedTransferReciever} - ${transferAmount},00PLN - ${transferTitle}`
     );
   });
 
   test("002 Valid mobile top-up with correct data", async ({ page }) => {
     // Arrange
+    const pulpitPage = new PulpitPage(page);
     const topupRevieverNumber = "502 xxx xxx";
     const topupAmount = "30";
+    const initialBalance = await pulpitPage.moneyValueText.innerText()
+    const expectedBalance = Number(initialBalance) - Number(topupAmount)
 
     // Act
-    const pulpitPage = new PulpitPage(page);
-    await pulpitPage.topupReciever.selectOption(topupRevieverNumber);
-    await pulpitPage.topupAmonut.fill(topupAmount);
+    await pulpitPage.topupRecieverInput.selectOption(topupRevieverNumber);
+    await pulpitPage.topupAmonutInput.fill(topupAmount);
     await pulpitPage.topupAgreementCheckbox.click();
     await pulpitPage.topupButton.click();
     await pulpitPage.closeButton.click();
 
     // Assert
-    await expect(pulpitPage.showMessages).toHaveText(
+    await expect(pulpitPage.messageText).toHaveText(
       `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupRevieverNumber}`
     );
+    await expect(pulpitPage.moneyValueText).toHaveText(`${expectedBalance}`)
   });
 });
