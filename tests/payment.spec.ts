@@ -22,22 +22,15 @@ test.describe("Payment tests", () => {
   });
   
   test("001 Valid simple normal payment", async ({ page }) => {
+    const recieverName = "Jacek Schroeter";
+    const recieverAccountNumber = "55 9595 9987 4841 4154 5465 69585";
     const paymentAmount = "1500";
     const paymentTitle = "kaska";
-    const recieverAccountNumber = "55 9595 9987 4841 4154 5465 69585";
-    const recieverName = "Jacek Schroeter";
     const successfulPaymentMessage = `Przelew wykonany! ${paymentAmount},00PLN dla ${recieverName}`;
     
     
+    await paymentPage.makeTransfer(recieverName, recieverAccountNumber, paymentAmount, paymentTitle)
     
-    await paymentPage.transferRecieverInput.fill(recieverName);
-    await paymentPage.transferRecieverAccNumberInput.fill(
-      recieverAccountNumber
-    );
-    await paymentPage.transferRecieverAmountInput.fill(paymentAmount);
-    await paymentPage.transferRecieverTitleInput.fill(paymentTitle);
-    await paymentPage.transferButton.click();
-    await paymentPage.closeButton.click();
 
     await expect(paymentPage.messageText).toHaveText(successfulPaymentMessage);
   });
