@@ -4,15 +4,18 @@ import { LoginPage } from "../pages/login.page";
 import { PulpitPage } from "../pages/pultpit.page";
 
 test.describe("pulpit test", () => {
+
+  let pulpitPage: PulpitPage;
+
   test.beforeEach(async ({ page }) => {
     const username = loginData.userLogin;
     const userPassword = loginData.userPassword;
-    const loginPage = new LoginPage(page);
-
     await page.goto("/");
-    await loginPage.loginInput.fill(username);
-    await loginPage.passwordInput.fill(userPassword);
-    await loginPage.loginButton.click();
+    
+    const loginPage = new LoginPage(page);
+    await loginPage.login(username,userPassword)
+
+    pulpitPage = new PulpitPage(page);
   });
 
   test("001 Valid quick transfer with correct data", async ({ page }) => {
@@ -23,7 +26,7 @@ test.describe("pulpit test", () => {
     const expectedTransferReciever = "Chuck Demobankowy";
 
     // Act
-    const pulpitPage = new PulpitPage(page);
+    
     await pulpitPage.transferRecieverInput.selectOption(recieverId);
     await pulpitPage.transferAmountInput.fill(transferAmount);
     await pulpitPage.transferTitleInput.fill(transferTitle);
@@ -38,7 +41,7 @@ test.describe("pulpit test", () => {
 
   test("002 Valid mobile top-up with correct data", async ({ page }) => {
     // Arrange
-    const pulpitPage = new PulpitPage(page);
+
     const topupRevieverNumber = "502 xxx xxx";
     const topupAmount = "30";
     const initialBalance = await pulpitPage.moneyValueText.innerText()

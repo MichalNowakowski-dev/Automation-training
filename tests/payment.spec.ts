@@ -5,18 +5,20 @@ import { PaymentPage } from "../pages/payment.page";
 import { PulpitPage } from "../pages/pultpit.page";
 
 test.describe("Payment tests", () => {
+  let paymentPage: PaymentPage;
+  
   test.beforeEach(async ({ page }) => {
     const username = loginData.userLogin;
     const userPassword = loginData.userPassword;
     
     const loginPage = new LoginPage(page);
     await page.goto("/");
-    await loginPage.loginInput.fill(username);
-    await loginPage.passwordInput.fill(userPassword);
-    await loginPage.loginButton.click();
+    await loginPage.login(username, userPassword)
 
     const pulpitPage = new PulpitPage(page);
     await pulpitPage.sideMenu.paymentButton.click()
+
+    paymentPage = new PaymentPage(page);
   });
   
   test("001 Valid simple normal payment", async ({ page }) => {
@@ -27,7 +29,7 @@ test.describe("Payment tests", () => {
     const successfulPaymentMessage = `Przelew wykonany! ${paymentAmount},00PLN dla ${recieverName}`;
     
     
-    const paymentPage = new PaymentPage(page);
+    
     await paymentPage.transferRecieverInput.fill(recieverName);
     await paymentPage.transferRecieverAccNumberInput.fill(
       recieverAccountNumber

@@ -4,8 +4,12 @@ import { LoginPage } from "../pages/login.page";
 import { PulpitPage } from "../pages/pultpit.page";
 
 test.describe("User login funcionality", () => {
+
+  let loginPage: LoginPage;
+
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    loginPage = new LoginPage(page)
   });
 
   test("001 Valid login with correct credentials", async ({ page }) => {
@@ -16,12 +20,10 @@ test.describe("User login funcionality", () => {
 
     // Act
 
-    const loginPage = new LoginPage(page);
-    await loginPage.loginInput.fill(username);
-    await loginPage.passwordInput.fill(userPassword);
-    await loginPage.loginButton.click();
+
+    await loginPage.login(username, userPassword)
     
-    // Assert
+    // Assert 
     const pulpitPage = new PulpitPage(page);
     await expect(pulpitPage.usernameText).toBeVisible();
     await expect(pulpitPage.usernameText).toHaveText(expectedUsername);
@@ -33,7 +35,7 @@ test.describe("User login funcionality", () => {
     const errorUsernameMessage = "identyfikator ma min. 8 znaków";
 
     // Act
-    const loginPage = new LoginPage(page);
+
     await loginPage.loginInput.fill(invalidUserLogin);
     await loginPage.passwordInput.click();
 
@@ -50,7 +52,7 @@ test.describe("User login funcionality", () => {
     const errorPasswordMessage = "hasło ma min. 8 znaków";
 
     // Act
-    const loginPage = new LoginPage(page);
+
     await loginPage.loginInput.fill(username);
     await loginPage.passwordInput.fill(invalidUserPassword);
     await loginPage.passwordInput.blur(); // Usuwa focus z elementu
