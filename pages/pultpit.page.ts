@@ -22,11 +22,18 @@ export class PulpitPage {
     closeButton = this.page.getByTestId("close-button")
     usernameText = this.page.getByTestId("user-name")
 
-    async makeTopup(recieverId: string, transferAmount: string, transferTitle: string): Promise<void>{
+    async makeTransfer(recieverId: string, transferAmount: string, transferTitle: string): Promise<void>{
         await this.transferRecieverInput.selectOption(recieverId);
         await this.transferAmountInput.fill(transferAmount);
         await this.transferTitleInput.fill(transferTitle);
         await this.transferButton.click();
+        await this.closeButton.click();
+    }
+    async makeTopup(topupRevieverNumber: string, topupAmount: string): Promise<void>{
+        await this.topupRecieverInput.selectOption(topupRevieverNumber);
+        await this.topupAmonutInput.fill(topupAmount);
+        await this.topupAgreementCheckbox.click();
+        await this.topupButton.click();
         await this.closeButton.click();
     }
 

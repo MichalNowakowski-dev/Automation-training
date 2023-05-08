@@ -21,7 +21,7 @@ test.describe("Payment tests", () => {
     paymentPage = new PaymentPage(page);
   });
   
-  test("001 Valid simple normal payment", async ({ page }) => {
+  test("001 Valid simple normal payment", async () => {
     const recieverName = "Jacek Schroeter";
     const recieverAccountNumber = "55 9595 9987 4841 4154 5465 69585";
     const paymentAmount = "1500";

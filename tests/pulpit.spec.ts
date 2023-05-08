@@ -17,7 +17,7 @@ test.describe("pulpit test", () => {
     pulpitPage = new PulpitPage(page);
   });
 
-  test("001 Valid quick transfer with correct data", async ({ page }) => {
+  test("001 Valid quick transfer with correct data", async () => {
     // Arrange
     const recieverId = "2";
     const transferAmount = "150";
@@ -26,7 +26,7 @@ test.describe("pulpit test", () => {
 
     // Act
 
-    await pulpitPage.makeTopup(recieverId, transferAmount, transferTitle);
+    await pulpitPage.makeTransfer(recieverId, transferAmount, transferTitle);
 
     // Assert
     await expect(pulpitPage.messageText).toHaveText(
@@ -34,7 +34,7 @@ test.describe("pulpit test", () => {
     );
   });
 
-  test("002 Valid mobile top-up with correct data", async ({ page }) => {
+  test("002 Valid mobile top-up with correct data", async () => {
     // Arrange
 
     const topupRevieverNumber = "502 xxx xxx";
@@ -43,11 +43,7 @@ test.describe("pulpit test", () => {
     const expectedBalance = Number(initialBalance) - Number(topupAmount);
 
     // Act
-    await pulpitPage.topupRecieverInput.selectOption(topupRevieverNumber);
-    await pulpitPage.topupAmonutInput.fill(topupAmount);
-    await pulpitPage.topupAgreementCheckbox.click();
-    await pulpitPage.topupButton.click();
-    await pulpitPage.closeButton.click();
+    await pulpitPage.makeTopup(topupRevieverNumber, topupAmount)
 
     // Assert
     await expect(pulpitPage.messageText).toHaveText(

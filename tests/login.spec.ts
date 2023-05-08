@@ -12,7 +12,7 @@ test.describe("User login funcionality", () => {
     loginPage = new LoginPage(page)
   });
 
-  test("001 Valid login with correct credentials", async ({ page }) => {
+  test("001 Valid login with correct credentials", async ({page}) => {
     // Arrange
     const username = loginData.userLogin;
     const userPassword = loginData.userPassword;
